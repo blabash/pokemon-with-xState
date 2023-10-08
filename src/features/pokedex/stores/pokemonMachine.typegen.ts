@@ -3,6 +3,16 @@
 export interface Typegen0 {
   "@@xstate/typegen": true;
   internalEvents: {
+    "done.invoke.pokedex.empty:invocation[0]": {
+      type: "done.invoke.pokedex.empty:invocation[0]";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
+    "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]": {
+      type: "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]";
+      data: unknown;
+      __tip: "See the XState TS docs to learn how to strongly type this.";
+    };
     "xstate.init": { type: "xstate.init" };
   };
   invokeSrcNameMap: {
@@ -10,12 +20,14 @@ export interface Typegen0 {
     fetchSinglePokemon: "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]";
   };
   missingImplementations: {
-    actions: "setSelectedPokemonId";
+    actions: "setPokemonList" | "setSelectedPokemon" | "setSelectedPokemonId";
     delays: never;
     guards: never;
     services: "fetchPokemonList" | "fetchSinglePokemon";
   };
   eventsCausingActions: {
+    setPokemonList: "done.invoke.pokedex.empty:invocation[0]";
+    setSelectedPokemon: "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]";
     setSelectedPokemonId: "SELECT_POKEMON";
   };
   eventsCausingDelays: {};
