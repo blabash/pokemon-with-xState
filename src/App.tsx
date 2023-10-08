@@ -1,5 +1,5 @@
 import "./App.css";
-import { Pokedex } from "@/features/pokedex";
+import { Pokedex } from "src/features/pokedex";
 
 function App() {
   return (
