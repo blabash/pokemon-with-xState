@@ -7,16 +7,10 @@ export const Pokedex = (props: Props) => {
   const [state, send] = useMachine(pokedexMachine);
   console.log("state.context", state.context);
   return (
-    <main style={{ display: "flex" }}>
-      <ul
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-        }}
-      >
+    <main className="grid grid-cols-[auto_1fr] w-[min(80%,800px)]">
+      <ul>
         {state.context.pokemonList.map((poke) => (
-          <li style={{ listStyle: "none" }}>
+          <li>
             <button
               onClick={() => send({ type: "SELECT_POKEMON", value: poke.id })}
             >
