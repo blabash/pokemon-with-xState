@@ -7,6 +7,11 @@ type PokemonListItemType = {
   name: string;
 };
 
+type PokemonListType = {
+  pageCount: number;
+  list: PokemonListItemType[];
+};
+
 type PokemonType = {
   id: PokemonIdType;
   name: string;
@@ -45,7 +50,7 @@ export const pokedexMachine = createMachine(
       events: {} as Events,
       services: {} as {
         fetchPokemonList: {
-          data: PokemonListItemType[];
+          data: PokemonListType;
         };
         fetchSinglePokemon: {
           data: PokemonType;
@@ -136,14 +141,15 @@ export const pokedexMachine = createMachine(
         context.selectedPokemon = event.data;
       },
       setPokemonList(context, event) {
-        context.pokemonList = event.data;
+        context.pokemonList = event.data.list;
+        context.pageCount = event.data.pageCount;
       },
     },
     services: {
-      fetchPokemonList: async (context): Promise<PokemonListItemType[]> =>
+      fetchPokemonList: async (context): Promise<PokemonListType> =>
         fetch(`/pages/${context.currPage}.json`)
           .then((res) => res.json())
-          .then((data) => data.list),
+          .then((data) => data),
       fetchSinglePokemon: async (context): Promise<PokemonType> =>
         fetch(`/pokemon/${context.selectedPokemonId}.json`)
           .then((res) => res.json())
