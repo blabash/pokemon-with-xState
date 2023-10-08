@@ -20,10 +20,10 @@ export interface Typegen0 {
     fetchSinglePokemon: "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]";
   };
   missingImplementations: {
-    actions: "setPokemonList" | "setSelectedPokemon" | "setSelectedPokemonId";
+    actions: never;
     delays: never;
     guards: never;
-    services: "fetchPokemonList" | "fetchSinglePokemon";
+    services: never;
   };
   eventsCausingActions: {
     setPokemonList: "done.invoke.pokedex.empty:invocation[0]";
