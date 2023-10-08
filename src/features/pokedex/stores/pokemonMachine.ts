@@ -30,11 +30,12 @@ type Context = {
 type Events =
   | { type: "SELECT_POKEMON"; value: PokemonIdType }
   | { type: "RETRY_POKEMON_LIST_FETCH" }
-  | { type: "RETRY_SINGLE_POKEMON_FETCH" };
+  | { type: "RETRY_SINGLE_POKEMON_FETCH" }
+  | { type: "SELECT_PAGE"; value: Context["currPage"] };
 
 const pokedexMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QAcD2BrSYAeA6MAtsgC4CeAxBKgHZi4CW1AbhnWphDvkWQoywGMAhsXo0A2gAYAulOmIUqWPVE0FIbIgDMARgDsuPQBZ9egGxmATJIAceyUYA0IUoh2SzuSQE4z3jzZakpI6ZoEAvuHO7Fh4hCQUYABOSahJuMgANiIAZmkEGayccTykfMyowqrUcnLqaMrV6poIAKyeWt6tWpYmrZY6Oq02ls6uCANGht6DIUbtRlp2NpHRRVwAFkKwAAqsBDQAMvSwxABiYMQCG2dC9JkArklg5ABKAKIAKq8AmgD6OwA8gBpd4AWUBADk-ocAJIAZU+fzOXwAwgAJOpIEANFRiajNRAAWks1lwvj0-hsRm8elmejGiAGWlwlhmPksrSMJj0enaqxx6zwW12+yOJ2I5Hh70O71RSKBoIhkKxika+MJbW83kM5j5rUkei0FkpjImklauHaQxsQ0sWlaBq0ApixQYsAuVw2jCg8J9mTAe0wB2olBodH4rEKHC4J091x9fuoUADQcINHKghE+NqMnqSjxamxLRsdlZdk6gSWWl0ZjNDstZmM3KMkk5HnmLqF7vj3uTSZTgbFoeSqXSWVy+WjsR7lwT-f9Q+DGcjVRzMlVgvVRdALU5NlwOmNLeMfhsrR09a6uE6Rj8t6b7RWUUFMeF2wHqeHvdu9yeLw+b5-nhWFIQAcVlAEQXBKFkTRTE82xXEmmLJlWgMVpvEsMJbAdfRBgZFxEC5HVbVsQJvBrO8IhfV1Ng-MAAwEYhIDTEMpRlOUFWg5VN2QjVUIQXlPFLUI70WSQa2NM0SNwMjS06KiwksSIX2oVBOHgJChXzbcCUEkkwnJJsqRpOl3CbM0iUtbVtUpWszBMc8zC7N9uASXTC303dECMUYiIQW0vEo3khi0GlQl5VyZxFNjxVOTyUJ8togpsYJ9Ek3pHL0GwzXcKZOg8dCtCNRYbG8aK3Vi4djlOH87keZ5EoE5KpgtO8m2wh1yvQ7x6x0KYzCPYY5kpAbKtjD05z7X1Fzi7yty8zV2gMfRvHPRYgjbHx63tQxTB5VtggsCb31geFGLAZjWOHZqdw0RBys8KwQj0Lr8MdM07x0XB5nsB1eWsOlnVo7sRU-Jd02oeq-ya7S9M1awCupOxugcEwdH88YjDew8Zi6IbyspalVPCIA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QAcD2BrSYAeA6MAtsgC4CeAxBKgHZi4CW1AbhnWphDvkWQoywGMAhsXo0A2gAYAulOmIUqWPVE0FIbIgDMARgDsuPQBZ9egGxmATJIAceyUYA0IUoh2SzuSQE4z3jzZakpI6ZoEAvuHO7Fh4hCQUYABOSahJuMgANiIAZmkEGayccTykfMyowqrUcnLqaMrV6poIAKyeWt6tWpYmrZY6Oq02ls6uCANGht6DIUbtRlp2NpHRRVwAFkKwAAqsBDQAMvSwxOQAygCih5cAwgAqAPo7APIA0pcAsi8AcnVIIAaKjE1GaiFa3m8hnMelarUkei0Fj03jGiGsrVw7SGNiGli0cMkWlWgPWeC2u32RxOxAAYmBiAINrShPRMgBXJJgcgAJUu9x5AE1nu8vr9HocAJLnJ60-m3AAS-0UjRBYIQAFpLNZcL4UbYjN49LM9GiJjotLhLDMfJZWkYTHpYWYSTFigxYPTGRtGFBzr7MmA9pgDtRKDQ6PxWIUOFwTl6mb7-dQoIHg4QaOVBCIQbUZPUlMC1ACWjY7Fa7J1AkstLozGaCZizMYHUZJHaPPNXWSPQmfSnk6mg1Sw8lUuksrl8jHYr2GYmBwHhyHM1GqrmZMrSari6AWnabLgLWZW8Y-DZWjoG11cJ0jH47832isoqTY+TtucwIGBMRIOnQwua47ieV4Pm+P58wBIEmhLRAnU8MtQnvRYiVresXHBQ1cFxWxAm8Wt7xGbt31wClBzTEc+xZNlOW5PkBWFc5JR+ABxG4RXA8U5XuRUtxgtU4ImVoDAhSwwlsAl9EGU1MLabDcLLTpCLCYlXzdHAgJuB5ngAQVYy5+MLWC93gqFvAGGwLBse8enxDDxg1e1DHbExISdJE7B0SJX2oVBOHgaCyQLHdQSErUwl1Zt-Bso1ZmbM0NR0ExpjMaSjEREYhj0EjZ3iMgQqLMLTIQIxRjk3EvAIp0hi0Q1QidXL3QpADqVOQqTI0cFKpsYJ9CJXoTz0GwzXcKZOg8EStERRYbG8JrNm2VrqGOU5qNZDkuQ6wSSqmSR7WRcSCTmkTUTk3QpjS465hRZKFrweN537P0l2W7bdy6tpmyPFEL0WIJ2x8Bt8UMUxHTbYILHusjP2-MBf3-Ed3uKz65s8KwQj0I7pLhM17x0XB5nsAknWsY01LWUjyNeqinpozawGR9VrHGmy7G6BwTB0crxgyywjxmLo0rm36jB88IgA */
     id: "pokedex",
 
     tsTypes: {} as import("./pokemonMachine.typegen").Typegen0,
@@ -106,10 +107,20 @@ const pokedexMachine = createMachine(
           },
         },
       },
+
       hasSinglePokemonFetchFailure: {
         on: {
           RETRY_SINGLE_POKEMON_FETCH: "isFetchingSinglePokemon",
         },
+      },
+    },
+
+    initial: "empty",
+
+    on: {
+      SELECT_PAGE: {
+        target: ".empty",
+        actions: "setCurrentPage",
       },
     },
   },
@@ -123,6 +134,9 @@ const pokedexMachine = createMachine(
       },
       setPokemonList(context, event) {
         context.pokemonList = event.data;
+      },
+      setCurrentPage(context, event) {
+        context.currPage = event.data;
       },
     },
     services: {

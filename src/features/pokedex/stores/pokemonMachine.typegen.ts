@@ -26,6 +26,7 @@ export interface Typegen0 {
     services: never;
   };
   eventsCausingActions: {
+    setCurrentPage: "SELECT_PAGE";
     setPokemonList: "done.invoke.pokedex.empty:invocation[0]";
     setSelectedPokemon: "done.invoke.pokedex.isFetchingSinglePokemon:invocation[0]";
     setSelectedPokemonId: "SELECT_POKEMON";
@@ -33,7 +34,10 @@ export interface Typegen0 {
   eventsCausingDelays: {};
   eventsCausingGuards: {};
   eventsCausingServices: {
-    fetchPokemonList: "RETRY_POKEMON_LIST_FETCH";
+    fetchPokemonList:
+      | "RETRY_POKEMON_LIST_FETCH"
+      | "SELECT_PAGE"
+      | "xstate.init";
     fetchSinglePokemon: "RETRY_SINGLE_POKEMON_FETCH" | "SELECT_POKEMON";
   };
   matchesStates:
