@@ -1,15 +1,22 @@
 import { useMachine } from "@xstate/react";
 import { pokedexMachine } from "../stores/pokemonMachine";
 
+const POKEMON_PER_PAGE = 10;
+
 type Props = {};
 
 export const Pokedex = (props: Props) => {
-  const [state, send] = useMachine(pokedexMachine);
-  console.log("state.context", state.context);
+  const [
+    {
+      context: { pokemonList, selectedPokemon, pageCount },
+    },
+    send,
+  ] = useMachine(pokedexMachine);
+
   return (
-    <main className="grid grid-cols-[auto_1fr] w-[min(80%,800px)]">
+    <main className="grid grid-cols-[minmax(auto,20%)_1fr] gap-3 w-[min(80%,800px)]">
       <ul className="flex flex-col gap-2">
-        {state.context.pokemonList.map((poke) => (
+        {pokemonList.map((poke) => (
           <li>
             <button
               className="w-full"
@@ -19,10 +26,29 @@ export const Pokedex = (props: Props) => {
             </button>
           </li>
         ))}
+        {[...Array(POKEMON_PER_PAGE - pokemonList.length)].map((_) => (
+          <li aria-hidden={true} className="invisible">
+            <button className="w-full">ditto</button>
+          </li>
+        ))}
       </ul>
       <div className="grid place-items-center">
-        {JSON.stringify(state.context.selectedPokemon)}
+        {JSON.stringify(selectedPokemon)}
       </div>
+      <footer className="col-span-2 flex gap-2 items-center">
+        Page
+        <nav>
+          <ul className="flex gap-2">
+            {[...Array(pageCount)].map((_, i) => (
+              <li>
+                <button onClick={() => send({ type: "SELECT_PAGE", value: i })}>
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </footer>
     </main>
   );
 };
