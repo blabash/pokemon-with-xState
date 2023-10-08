@@ -1,12 +1,10 @@
-import { useState } from "react";
 import "./App.css";
+import { Pokedex } from "@/features/pokedex";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <h1>Pokemon with XState</h1>
+      <Pokedex />
     </>
   );
 }
