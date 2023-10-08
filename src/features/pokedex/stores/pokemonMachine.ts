@@ -145,9 +145,9 @@ export const pokedexMachine = createMachine(
           .then((res) => res.json())
           .then((data) => data.list),
       fetchSinglePokemon: async (context): Promise<PokemonType> =>
-        fetch(`/pokemon/${context.selectedPokemonId}.json`).then((res) =>
-          res.json()
-        ),
+        fetch(`/pokemon/${context.selectedPokemonId}.json`)
+          .then((res) => res.json())
+          .then((data) => data),
     },
   }
 );
