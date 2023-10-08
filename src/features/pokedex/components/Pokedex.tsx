@@ -1,11 +1,13 @@
 import { useMachine } from "@xstate/react";
 import { pokedexMachine } from "../stores/pokemonMachine";
+import { useInterpret } from "@xstate-ninja/react";
 
 const POKEMON_PER_PAGE = 10;
 
 type Props = {};
 
 export const Pokedex = (props: Props) => {
+  const service = useInterpret(pokedexMachine, { devTools: true });
   const [
     {
       context: { pokemonList, selectedPokemon, pageCount },
