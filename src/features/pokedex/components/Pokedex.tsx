@@ -32,8 +32,24 @@ export const Pokedex = (props: Props) => {
           </li>
         ))}
       </ul>
-      <div className="grid place-items-center">
-        {JSON.stringify(selectedPokemon)}
+      <div className="grid grid-cols-[1fr_2fr] place-items-center">
+        {selectedPokemon && (
+          <ul className="justify-self-start">
+            {Object.entries(selectedPokemon).map(([key, val]) => (
+              <li key={key}>
+                <span className="font-black">{key}:</span>{" "}
+                {Array.isArray(val) ? val.join(", ") : val}
+              </li>
+            ))}
+          </ul>
+        )}
+        {selectedPokemon && (
+          <img
+            className="max-h-[500px] justify-self-center"
+            src={`/pokemon/${selectedPokemon.id}.jpg`}
+            alt={selectedPokemon.name}
+          />
+        )}
       </div>
       <footer className="col-span-2 flex gap-2 items-center">
         Page
