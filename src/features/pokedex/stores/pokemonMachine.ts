@@ -129,19 +129,21 @@ export const pokedexMachine = createMachine(
       setSelectedPokemonId(context, event) {
         context.selectedPokemonId = event.value;
       },
+      setCurrentPage(context, event) {
+        context.currPage = event.value;
+      },
       setSelectedPokemon(context, event) {
         context.selectedPokemon = event.data;
       },
       setPokemonList(context, event) {
         context.pokemonList = event.data;
       },
-      setCurrentPage(context, event) {
-        context.currPage = event.data;
-      },
     },
     services: {
       fetchPokemonList: async (context): Promise<PokemonListItemType[]> =>
-        fetch(`/pages/${context.currPage}.json`).then((res) => res.json()),
+        fetch(`/pages/${context.currPage}.json`)
+          .then((res) => res.json())
+          .then((data) => data.list),
       fetchSinglePokemon: async (context): Promise<PokemonType> =>
         fetch(`/pokemon/${context.selectedPokemonId}.json`).then((res) =>
           res.json()
