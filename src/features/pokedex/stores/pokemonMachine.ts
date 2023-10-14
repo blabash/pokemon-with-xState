@@ -33,7 +33,7 @@ type Context = {
 };
 
 type Events =
-  | { type: "SELECT_POKEMON"; value: PokemonIdType }
+  | { type: "SELECT_POKEMON"; value: Context["selectedPokemonId"] }
   | { type: "RETRY_POKEMON_LIST_FETCH" }
   | { type: "RETRY_SINGLE_POKEMON_FETCH" }
   | { type: "SELECT_PAGE"; value: Context["currPage"] };
@@ -147,13 +147,11 @@ export const pokedexMachine = createMachine(
     },
     services: {
       fetchPokemonList: async (context): Promise<PokemonListType> =>
-        fetch(`/pages/${context.currPage}.json`)
-          .then((res) => res.json())
-          .then((data) => data),
+        fetch(`/pages/${context.currPage}.json`).then((res) => res.json()),
       fetchSinglePokemon: async (context): Promise<PokemonType> =>
-        fetch(`/pokemon/${context.selectedPokemonId}.json`)
-          .then((res) => res.json())
-          .then((data) => data),
+        fetch(`/pokemon/${context.selectedPokemonId}.json`).then((res) =>
+          res.json()
+        ),
     },
   }
 );
