@@ -1,13 +1,11 @@
 import { useMachine } from "@xstate/react";
 import { pokedexMachine } from "../stores/pokemonMachine";
-import { useInterpret } from "@xstate-ninja/react";
 
 const POKEMON_PER_PAGE = 10;
 
 type Props = {};
 
 export const Pokedex = (props: Props) => {
-  const service = useInterpret(pokedexMachine, { devTools: true });
   const [
     {
       context: { pokemonList, selectedPokemon, pageCount },
@@ -34,8 +32,11 @@ export const Pokedex = (props: Props) => {
           </li>
         ))}
       </ul>
-      <div className="grid grid-cols-[1fr_2fr] place-items-center">
-        {selectedPokemon && (
+      {!selectedPokemon && (
+        <p className="grid place-items-center">Select a new Pokemon or page</p>
+      )}
+      {selectedPokemon && (
+        <div className="grid grid-cols-[1fr_2fr] place-items-center">
           <ul className="justify-self-start">
             {Object.entries(selectedPokemon).map(([key, val]) => (
               <li key={key}>
@@ -44,15 +45,13 @@ export const Pokedex = (props: Props) => {
               </li>
             ))}
           </ul>
-        )}
-        {selectedPokemon && (
           <img
             className="max-h-[500px] justify-self-center"
             src={`/pokemon/${selectedPokemon.id}.jpg`}
             alt={selectedPokemon.name}
           />
-        )}
-      </div>
+        </div>
+      )}
       <footer className="col-span-2 flex gap-2 items-center">
         Page
         <nav>
