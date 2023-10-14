@@ -34,9 +34,9 @@ type Context = {
 
 type Events =
   | { type: "SELECT_POKEMON"; value: Context["selectedPokemonId"] }
+  | { type: "SELECT_PAGE"; value: Context["currPage"] }
   | { type: "RETRY_POKEMON_LIST_FETCH" }
-  | { type: "RETRY_SINGLE_POKEMON_FETCH" }
-  | { type: "SELECT_PAGE"; value: Context["currPage"] };
+  | { type: "RETRY_SINGLE_POKEMON_FETCH" };
 
 export const pokedexMachine = createMachine(
   {
